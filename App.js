@@ -6,6 +6,7 @@ import Matter from 'matter-js';
 import { GameEngine } from 'react-native-game-engine';
 import Bird from './Bird';
 import Constants from './Constants';
+import Physics from './Physics';
 
 export default class App extends Component {
   constructor(props) {
@@ -49,6 +50,7 @@ export default class App extends Component {
           ref={(ref) => { this.gameEngine = ref; }}
           style={styles.gameContainer}
           running={this.state.running}
+          systems={[Physics]}
           entities={this.entities}>
           <StatusBar hidden={true} />
         </GameEngine>
