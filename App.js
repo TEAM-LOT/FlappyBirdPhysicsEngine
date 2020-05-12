@@ -9,6 +9,22 @@ import Constants from './Constants';
 import Physics from './Physics';
 import Wall from './Wall';
 
+export const randomBetween = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+export const generatePipes = () => {
+  let topPipeHeight = randomBetween(100, (Constants.MAX_HEIGHT / 2) - 100);
+  let bottomPipeHeight = Constants.MAX_HEIGHT - topPipeHeight - Constants.GAP_SIZE;
+  let sizes = [topPipeHeight, bottomPipeHeight];
+
+  if (Math.random() < 0.5) {
+    sizes = sizes.reverse();
+  }
+
+  return sizes;
+}
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -54,8 +70,41 @@ export default class App extends Component {
       { isStatic: true }
     );
 
+    //障害物1&2
+    let [pipe1Height, pipe2Height] = generatePipes();
+    let pipe1 = Matter.Bodies.rectangle(
+      Constants.MAX_WIDTH - (Constants.PIPE_WIDTH / 2),
+      pipe1Height / 2,
+      Constants.PIPE_WIDTH,
+      pipe1Height,
+      { isStatic: true }
+    )
+    let pipe2 = Matter.Bodies.rectangle(
+      Constants.MAX_WIDTH - (Constants.PIPE_WIDTH / 2),
+      Constants.MAX_HEIGHT - (pipe2Height / 2),
+      Constants.PIPE_WIDTH,
+      pipe2Height,
+      { isStatic: true }
+    )
 
-    Matter.World.add(world, [bird, floor, ceiling]);      //Matter.World.add(ゲームシーン, [ゲーム内オブジェクト配列])
+    //障害物3&4
+    let [pipe3Height, pipe4Height] = generatePipes();
+    let pipe3 = Matter.Bodies.rectangle(
+      Constants.MAX_WIDTH * 2 - (Constants.PIPE_WIDTH / 2),
+      pipe3Height / 2,
+      Constants.PIPE_WIDTH,
+      pipe3Height,
+      { isStatic: true }
+    )
+    let pipe4 = Matter.Bodies.rectangle(
+      Constants.MAX_WIDTH * 2 - (Constants.PIPE_WIDTH / 2),
+      Constants.MAX_HEIGHT - (pipe4Height / 2),
+      Constants.PIPE_WIDTH,
+      pipe4Height,
+      { isStatic: true }
+    )
+
+    Matter.World.add(world, [bird, floor, ceiling, pipe1, pipe2, pipe3, pipe4]);      //Matter.World.add(ゲームシーン, [ゲーム内オブジェクト配列])
 
     //GameEngineに返す描画プロパティ配列?
     return {
@@ -63,6 +112,10 @@ export default class App extends Component {
       bird: { body: bird, size: [50, 50], color: 'red', renderer: Bird },
       floor: { body: floor, size: [Constants.MAX_WIDTH, 50], color: "green", renderer: Wall},
       ceiling: { body: ceiling, size: [Constants.MAX_WIDTH, 50], color: "green", renderer: Wall },
+      pipe1: { body: pipe1, size: [Constants.PIPE_WIDTH, pipe1Height], color: "green", renderer: Wall },
+      pipe2: { body: pipe2, size: [Constants.PIPE_WIDTH, pipe2Height], color: "green", renderer: Wall },
+      pipe3: { body: pipe3, size: [Constants.PIPE_WIDTH, pipe3Height], color: "green", renderer: Wall },
+      pipe4: { body: pipe4, size: [Constants.PIPE_WIDTH, pipe4Height], color: "green", renderer: Wall },
     }
   }
 
