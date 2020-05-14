@@ -1,6 +1,6 @@
 # FlappyBirdPhysicsEngine
 
-# Project Setttig
+# Project Setting
 ```
 $ react-native init FlappyBirdPhysicsEngine
 $ cd FlappyBirdPhysicsEngine
